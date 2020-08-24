@@ -206,6 +206,8 @@ html, body {
 
 .shop-item-image {
     height: 250px;
+    padding: 10px;
+    
 }
 
 .shop-item-details {
