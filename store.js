@@ -26,14 +26,42 @@ function ready() {
     }
 }
 
-function addToCartClicked(event){
+function addToCartClicked(event){//gets information from the element
     var btn = event.target;
     var shopItem = btn.parentElement.parentElement;
     var itemName = shopItem.getElementsByClassName('shop-item-title')[0].innerText; //only want one variable
     var price = shopItem.getElementsByClassName('shop-item-price')[0].innerText;
     var imagesrc = shopItem.getElementsByClassName('shop-item-image')[0].src;
     console.log(itemName, price, imagesrc);
-    addItemToCart(title, price, imagesrc);
+    addItemToCart(itemName, price, imagesrc); //creates new item in cart
+    updateTotal();
+}
+
+function addItemToCart(itemName, price, imagesrc){
+    var cartRow = document.createElement('div'); //creates div element, not added to HTML yet
+    cartRow.classList.add('cart-row');
+    var cartItems = document.getElementsByClassName('cart-items')[0];
+    var existingCartItems = cartItems.getElementsByClassName('cart-item-title');
+    for (var i = 0; i < existingCartItems.length; i++){
+        if (existingCartItems[i].innerText == itemName){
+            alert('Item already in cart');
+            return; //exits from function, meaning remaining code doesn/t execute;
+        }
+    }
+    var cartRowContent = `
+        <div class="cart-item cart-column">
+            <img class="cart-item-image" src="${imagesrc}" width="100" height="100">
+            <span class="cart-item-title">${itemName}</span>
+        </div>
+        <span class="cart-price cart-column">${price}</span>
+        <div class="cart-quantity cart-column">
+            <input class="cart-quantity-input" type="number" value="1">
+            <button class="btn btn-danger" type="button">REMOVE</button>
+        </div>`
+    cartRow.innerHTML = cartRowContent;
+    cartItems.append(cartRow); // adds empty div to cart
+    cartRow.getElementsByClassName('btn-danger')[0].addEventListener('click', removeCartItem);//because this button did not yet exist when HTML was loaded, need to add event listener
+    cartRow.getElementsByClassName('cart-quantity-input')[0].addEventListener('change', quantityChanged);//same for quantity
 }
 
 function quantityChanged(event){
