@@ -24,6 +24,19 @@ function ready() {
         var btn = addBtns[i];
         btn.addEventListener('click', addToCartClicked)
     }
+
+    var purchasebtn = document.getElementsByClassName('btn-purchase')[0];
+    purchasebtn.addEventListener('click', purchaseComplete)
+
+}
+
+function purchaseComplete() {
+    alert('Thank you for purchase');
+    var cartItems = document.getElementsByClassName('cart-items')[0];
+    while (cartItems.hasChildNodes()) {
+        cartItems.removeChild(cartItems.firstChild);
+    }//empties cart
+    updateTotal();
 }
 
 function addToCartClicked(event){//gets information from the element
