@@ -12,6 +12,36 @@ function ready() {
         var button = removeCartItemBtn[i];
         button.addEventListener('click', removeCartItem);
     }
+
+    var quantityInputs = document.getElementsByClassName('cart-quantity-input');
+    for (var i = 0; i < quantityInputs.length; i++){
+        var input = quantityInputs[i];
+        input.addEventListener('change', quantityChanged)//waits for value to change
+    }
+
+    var addBtns = document.getElementsByClassName('shop-item-button');
+    for (var i = 0; i < addBtns.length; i++){
+        var btn = addBtns[i];
+        btn.addEventListener('click', addToCartClicked)
+    }
+}
+
+function addToCartClicked(event){
+    var btn = event.target;
+    var shopItem = btn.parentElement.parentElement;
+    var itemName = shopItem.getElementsByClassName('shop-item-title')[0].innerText; //only want one variable
+    var price = shopItem.getElementsByClassName('shop-item-price')[0].innerText;
+    var imagesrc = shopItem.getElementsByClassName('shop-item-image')[0].src;
+    console.log(itemName, price, imagesrc);
+    addItemToCart(title, price, imagesrc);
+}
+
+function quantityChanged(event){
+    var input = event.target; //input element
+    if (isNaN(input.value) || input.value <= 0){// is not a number (isNaN) checks input value and makes sure at least 1 item is ordered
+        input.value = 1;
+    }
+    updateTotal(); //updates each time quantity changed
 }
 
 function removeCartItem(event) {
@@ -32,5 +62,5 @@ function updateTotal() {
         var quantity = elementQuantity.value; //inputs don't have inner text, so we need value property
         total += (price * quantity); // adds to total
     }
-    document.getElementsByClassName('cart-total-price')[0].innerText = '$' + total; //updates total
+    document.getElementsByClassName('cart-total-price')[0].innerText = '$' + total.toFixed(2); //updates total, .toFixed keeps the numbers from getting too funky
 }
